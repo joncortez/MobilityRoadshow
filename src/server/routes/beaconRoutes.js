@@ -1,8 +1,8 @@
 var express = require('express');
 
-var routes = function(Event) {
+var routes = function(Beacon) {
     var router = express.Router();
-    var controller = require('../controllers/eventController.js')(Event);
+    var controller = require('../controllers/beaconController.js')(Beacon);
     
     router.route('/')
         .post(controller.post)

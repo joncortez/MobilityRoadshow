@@ -1,73 +1,73 @@
 var _ = require('lodash');
-var controller = function(Event) {
+var controller = function(EventAttendee) {
     
     /* Create */
     var post = function(req, res) {
-        var event = new Event(req.body);
-        event.save(function(err) {
+        var eventAttendee = new EventAttendee(req.body);
+        eventAttendee.save(function(err) {
             if (err) {
                 res.status(500).send(err);
             } else {
                 res.status(201);
-                res.send(event);
+                res.send(eventAttendee);
             }
         });
     };
     
     /* Read */
     var get = function(req, res) {
-        Event.find(function(err, events) {
+        EventAttendee.find(function(err, eventAttendees) {
             if (err) {
                 res.status(500).send(err);
             } else {
-                res.json(events);                
+                res.json(eventAttendees);                
             }
         });
     };
     
     /* Update */
     var put = function(req, res) {
-        Event.findById(req.params.id, function(err, event) {
+        EventAttendee.findById(req.params.id, function(err, eventAttendee) {
             if (err) {
                 res.status(500).send(err);
                 return;
             }
             
-            if (event) {
-                _.merge(event, req.body);
-                event.save(function(err) {
+            if (eventAttendee) {
+                _.merge(eventAttendee, req.body);
+                eventAttendee.save(function(err) {
                     if (err)
                         res.status(500).send(err);
                     else
-                        res.json(event);
+                        res.json(eventAttendee);
                 });
             } else {
-                res.status(404).send('Event not found');
+                res.status(404).send('EventAttendee not found');
             }            
         });
     };
     
     /* Read by Id */
     var getById = function(req, res) {
-        Event.findById(req.params.id, function(err, event) {
+        EventAttendee.findById(req.params.id, function(err, eventAttendee) {
             if (err) {
                 res.status(500).send(err);
                 return;
             }
             
-            res.json(event);
+            res.json(eventAttendee);
         });
     };
     
     /* Delete */
     var deleteById = function(req, res) {
-        Event.findByIdAndRemove(req.params.id, function(err, event) {
+        EventAttendee.findByIdAndRemove(req.params.id, function(err, eventAttendee) {
             if (err) {
                 res.status(500).send(err);
                 return;
             }
             
-            res.status(204).send('Event deleted');
+            res.status(204).send('EventAttendee deleted');
         });
     };
     

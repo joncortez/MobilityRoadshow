@@ -1,8 +1,8 @@
 var express = require('express');
 
-var routes = function(Event) {
+var routes = function(EventAttendee) {
     var router = express.Router();
-    var controller = require('../controllers/eventController.js')(Event);
+    var controller = require('../controllers/eventAttendeeController.js')(EventAttendee);
     
     router.route('/')
         .post(controller.post)
