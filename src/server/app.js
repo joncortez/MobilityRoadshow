@@ -24,7 +24,7 @@ app.use('/api/attendees', attendeeRouter);
 var beaconRouter = require('./routes/beaconRoutes')(Beacon);
 app.use('/api/beacons', beaconRouter);
 
-var eventAttendeeRouter = require('./routes/eventAttendeeRoutes')(EventAttendee);
+var eventAttendeeRouter = require('./routes/eventAttendeeRoutes')(EventAttendee, Event, Attendee, Beacon);
 app.use('/api/eventattendees', eventAttendeeRouter);
 
 app.get('/', function(req, res) {

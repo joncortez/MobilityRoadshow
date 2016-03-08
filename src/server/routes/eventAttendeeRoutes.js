@@ -1,10 +1,8 @@
-/* Not sure if we still need this route */
-
 var express = require('express');
 
-var routes = function(EventAttendee) {
+var routes = function(EventAttendee, Event, Attendee, Beacon) {
     var router = express.Router();
-    var controller = require('../controllers/eventAttendeeController.js')(EventAttendee);
+    var controller = require('../controllers/eventAttendeeController.js')(EventAttendee, Event, Attendee, Beacon);
     
     router.route('/')
         .post(controller.post)
