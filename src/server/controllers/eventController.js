@@ -4,6 +4,9 @@ var controller = function(Event) {
     /* Create */
     var post = function(req, res) {
         var event = new Event(req.body);
+        if (req.body.code) {
+            event.code = _.toLower(req.body.code);
+        }
         event.save(function(err) {
             if (err) {
                 res.status(500).send(err);
@@ -35,6 +38,9 @@ var controller = function(Event) {
             
             if (event) {
                 _.merge(event, req.body);
+                if (req.body.code) {
+                    event.code = _.toLower(req.body.code);
+                }
                 event.save(function(err) {
                     if (err)
                         res.status(500).send(err);
@@ -54,8 +60,26 @@ var controller = function(Event) {
                 res.status(500).send(err);
                 return;
             }
-            
-            res.json(event);
+            if (event) {
+                res.json(event);
+            } else {
+                res.status(404).send('Event not found');
+            }
+        });
+    };
+    
+    /* Read by Code */
+    var getByCode = function(req, res) {
+        Event.findOne({code: _.toLower(req.params.code)}, function(err, event) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+            if (event) {
+                res.json(event);
+            } else {
+                res.status(404).send('Event not found');
+            }
         });
     };
     
@@ -76,6 +100,7 @@ var controller = function(Event) {
         get: get,
         put: put,
         getById: getById,
+        getByCode: getByCode,
         delete: deleteById
     };
 };

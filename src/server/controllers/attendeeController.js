@@ -4,6 +4,9 @@ var controller = function(Attendee) {
     /* Create */
     var post = function(req, res) {
         var attendee = new Attendee(req.body);
+        if (req.body.email) {
+            event.email = _.toLower(req.body.email);
+        }
         attendee.save(function(err) {
             if (err) {
                 res.status(500).send(err);
@@ -35,6 +38,9 @@ var controller = function(Attendee) {
             
             if (attendee) {
                 _.merge(attendee, req.body);
+                if (req.body.email) {
+                    event.email = _.toLower(req.body.email);
+                }
                 attendee.save(function(err) {
                     if (err)
                         res.status(500).send(err);
@@ -54,8 +60,26 @@ var controller = function(Attendee) {
                 res.status(500).send(err);
                 return;
             }
-            
-            res.json(attendee);
+            if (attendee) {
+                res.json(attendee);
+            } else {
+                res.status(404).send('Attendee not found');
+            }
+        });
+    };
+
+    /* Read by Email */
+    var getByEmail = function(req, res) {
+        Event.findOne({email: _.toLower(req.params.email)}, function(err, attendee) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+            if (attendee) {
+                res.json(attendee);
+            } else {
+                res.status(404).send('Attendee not found');
+            }
         });
     };
     
@@ -76,6 +100,7 @@ var controller = function(Attendee) {
         get: get,
         put: put,
         getById: getById,
+        getByEmail: getByEmail,
         delete: deleteById
     };
 };

@@ -12,6 +12,9 @@ var routes = function(Event) {
         .put(controller.put)
         .delete(controller.delete)
         .get(controller.getById);
+    
+    router.route('/findByCode/:code')
+        .get(controller.getByCode);
         
     return router;
 };
