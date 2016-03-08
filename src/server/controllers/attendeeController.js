@@ -4,9 +4,6 @@ var controller = function(Attendee) {
     /* Create */
     var post = function(req, res) {
         var attendee = new Attendee(req.body);
-        if (req.body.email) {
-            event.email = _.toLower(req.body.email);
-        }
         attendee.save(function(err) {
             if (err) {
                 res.status(500).send(err);
@@ -19,13 +16,15 @@ var controller = function(Attendee) {
     
     /* Read */
     var get = function(req, res) {
-        Attendee.find(function(err, attendees) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(attendees);                
-            }
-        });
+        Attendee.find()
+            .populate('_beacon')
+            .exec(function(err, attendees) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.json(attendees);
+                }
+            });
     };
     
     /* Update */
@@ -38,9 +37,6 @@ var controller = function(Attendee) {
             
             if (attendee) {
                 _.merge(attendee, req.body);
-                if (req.body.email) {
-                    event.email = _.toLower(req.body.email);
-                }
                 attendee.save(function(err) {
                     if (err)
                         res.status(500).send(err);
@@ -55,32 +51,49 @@ var controller = function(Attendee) {
     
     /* Read by Id */
     var getById = function(req, res) {
-        Attendee.findById(req.params.id, function(err, attendee) {
-            if (err) {
-                res.status(500).send(err);
-                return;
-            }
-            if (attendee) {
-                res.json(attendee);
-            } else {
-                res.status(404).send('Attendee not found');
-            }
-        });
+        Attendee.findById(req.params.id)
+            .populate('_beacon')
+            .exec(function(err, attendee) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                if (attendee) {
+                    res.json(attendee);
+                } else {
+                    res.status(404).send('Attendee not found');
+                }
+            });
     };
 
     /* Read by Email */
     var getByEmail = function(req, res) {
-        Event.findOne({email: _.toLower(req.params.email)}, function(err, attendee) {
-            if (err) {
-                res.status(500).send(err);
-                return;
-            }
-            if (attendee) {
-                res.json(attendee);
-            } else {
-                res.status(404).send('Attendee not found');
-            }
-        });
+        Attendee.findOne({email: _.toLower(req.params.email)})
+            .populate('_beacon')
+            .exec(function(err, attendee) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                if (attendee) {
+                    res.json(attendee);
+                } else {
+                    res.status(404).send('Attendee not found');
+                }
+            });
+    };
+    
+    /* Read by Event */
+    var getByEvent = function(req, res) {
+        Attendee.find({eventId: req.params.eventId})
+            .populate('_beacon')
+            .exec(function(err, attendees) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.json(attendees);
+                }
+            });
     };
     
     /* Delete */
@@ -101,6 +114,7 @@ var controller = function(Attendee) {
         put: put,
         getById: getById,
         getByEmail: getByEmail,
+        getByEvent: getByEvent,
         delete: deleteById
     };
 };

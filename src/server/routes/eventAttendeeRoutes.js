@@ -1,3 +1,5 @@
+/* Not sure if we still need this route */
+
 var express = require('express');
 
 var routes = function(EventAttendee) {

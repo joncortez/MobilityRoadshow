@@ -1,3 +1,5 @@
+/* Not sure if we still need this controller */
+
 var _ = require('lodash');
 var controller = function(EventAttendee) {
     
@@ -8,8 +10,26 @@ var controller = function(EventAttendee) {
             if (err) {
                 res.status(500).send(err);
             } else {
-                res.status(201);
-                res.send(eventAttendee);
+                if (eventAttendee.eventId && eventAttendee.attendeeId) {
+                    Event.findById(eventAttendee.eventId, function(err, event) {
+                        Attendee.findById(eventAttendee.attendeeId, function(err, attendee) {
+                            attendee._event = event._id;
+                            if (eventAttendee.beaconId) {
+                                Beacon.findById(eventAttendee.beaconId, function(err, beacon) {
+                                    attendee._beacon = beacon._id;
+                                });
+                            }
+                            attendee.save(function(err) {
+                                if (err) {
+                                    res.status(500).send(err);
+                                } else {
+                                    res.status(201);
+                                    res.send(eventAttendee);
+                                }
+                            });
+                        });
+                    });
+                }
             }
         });
     };
@@ -20,7 +40,7 @@ var controller = function(EventAttendee) {
             if (err) {
                 res.status(500).send(err);
             } else {
-                res.json(eventAttendees);                
+                res.json(eventAttendees);
             }
         });
     };

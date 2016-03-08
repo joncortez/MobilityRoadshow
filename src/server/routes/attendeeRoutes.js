@@ -13,6 +13,12 @@ var routes = function(Attendee) {
         .delete(controller.delete)
         .get(controller.getById);
         
+    router.route('/findByEmail/:email')
+        .get(controller.getByEmail);
+    
+    router.route('/findByEvent/:eventId')
+        .get(controller.getByEvent);
+        
     return router;
 };
 
