@@ -96,6 +96,19 @@ var controller = function(Attendee) {
             });
     };
     
+    /* Read Employees by Event */
+    var getEmployeesByEvent = function(req, res) {
+        Attendee.find({eventId: req.params.eventId, isNeudesicEmployee: true})
+            .populate('_beacon')
+            .exec(function(err, attendees) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.json(attendees);
+                }
+            });
+    };
+    
     /* Delete */
     var deleteById = function(req, res) {
         Attendee.findByIdAndRemove(req.params.id, function(err, attendee) {
@@ -115,6 +128,7 @@ var controller = function(Attendee) {
         getById: getById,
         getByEmail: getByEmail,
         getByEvent: getByEvent,
+        getEmployeesByEvent: getEmployeesByEvent,
         delete: deleteById
     };
 };

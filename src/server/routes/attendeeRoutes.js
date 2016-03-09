@@ -18,6 +18,9 @@ var routes = function(Attendee) {
     
     router.route('/findByEvent/:eventId')
         .get(controller.getByEvent);
+    
+    router.route('/findEmployeesByEvent/:eventId')
+        .get(controller.getEmployeesByEvent);
         
     return router;
 };
