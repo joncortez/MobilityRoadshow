@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var attendeeSchema = new Schema({
-    firstName:          {type: String, required: true},
-    lastName:           {type: String, required: true},
+    firstName:          {type: String},
+    lastName:           {type: String},
     company:            {type: String},
     email:              {type: String, required: true, lowercase: true, trim: true},
     isNeudesicEmployee: {type: Boolean, default: false},
